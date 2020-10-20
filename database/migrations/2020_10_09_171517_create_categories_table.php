@@ -19,6 +19,16 @@ class CreateCategoriesTable extends Migration
             $table->unsignedInteger('parent_id')->nullable()->default(null);
             $table->timestamps();
         });
+        Schema::create('category_course', function (Blueprint $table) {
+
+            $table->integer('category_id')->unsigned()->index();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
+            $table->integer('course_id')->unsigned()->index();
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,6 +38,7 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('category_course');
         Schema::dropIfExists('categories');
     }
 }

@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'App\Http\Controllers\MainController@index');
-Route::get('/learn/{slug1?}/{slug2?}','App\Http\Controllers\MainController@show');
+Route::get('/learn/{slug1?}/{slug2?}','App\Http\Controllers\LearnController@show');
