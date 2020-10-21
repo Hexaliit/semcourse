@@ -29,3 +29,15 @@ div.cover {
     padding-left: 100px;
     font-size: 24pt;
 }
+.course-banner {
+    height: 450px;
+}
+.course-intro-shadow {
+    top: 0;
+    right: 0;
+    background-color: rgba(0,0,0,.5);
+}
+.course-title {
+    top: 50%;
+    right:0;
+}

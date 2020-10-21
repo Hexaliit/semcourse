@@ -13,4 +13,8 @@ class Course extends Model
     {
         return $this->belongsToMany(Category::class)->withTimestamps();
     }
+    public function videos()
+    {
+        return $this->hasMany(Video::class,'course_id');
+    }
 }

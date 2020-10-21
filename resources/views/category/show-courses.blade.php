@@ -11,7 +11,8 @@
                         <div class="card-body">
                             <h5 class="card-title">{{$course->title}}</h5>
                             <p class="card-text">{{Illuminate\Support\Str::limit($course->content,150)}}</p>
-                            <a href="#" class="btn btn-primary">ادامه مطلب</a>
+                            <a href="/course/{{str_replace(' ','-',$course->title)}}" class="btn btn-primary">ادامه مطلب</a>
+                            <span class="d-block mt-3 text-muted">{{\Morilog\Jalali\Jalalian::forge(explode(' ',$course->created_at)[0])->format('%B %d، %Y')}}</span>
                         </div>
                     </div>
                 </div>

@@ -26,8 +26,8 @@
                 </li>
 
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="دنبال چه هستین" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
+                <input class="form-control mr-sm-2" type="text" placeholder="دنبال چه هستین" aria-label="Search" name="search">
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">جستجو</button>
             </form>
         </div>
