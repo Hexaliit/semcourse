@@ -17,3 +17,5 @@ Route::get('/', 'App\Http\Controllers\MainController@index');
 Route::get('/search','App\Http\Controllers\MainController@search');
 Route::get('/learn/{slug1?}/{slug2?}','App\Http\Controllers\LearnController@show');
 Route::get('/course/{slug1}/{slug2?}','App\Http\Controllers\CourseController@show');
+
+
