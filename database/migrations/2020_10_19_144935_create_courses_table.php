@@ -20,7 +20,7 @@ class CreateCoursesTable extends Migration
             $table->text('content');
             $table->unsignedInteger('price')->nullable()->default(null);
             $table->string('avatar')->nullable();
-            $table->string('source', 255)->nullable();
+            $table->string('source')->nullable();
             $table->timestamps();
         });
     }

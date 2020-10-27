@@ -10,7 +10,7 @@
     <title>Laravel</title>
 </head>
 <body>
-@include('inc.header')
+{{--@include('inc.header')--}}
 <div id="app" class="pt-5 mt-2">
     <div class="container-fluid">
         @yield('content')

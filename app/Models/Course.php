@@ -9,9 +9,13 @@ class Course extends Model
 {
     use HasFactory;
     protected $fillable = ['user_id','title','price','content','avatar','source'];
-    public function Categories()
+    public function categories()
     {
         return $this->belongsToMany(Category::class)->withTimestamps();
+    }
+    public function getCategoryListAttribute()
+    {
+        return $this->categories()->pluck('id');
     }
     public function videos()
     {
