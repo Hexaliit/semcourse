@@ -11,21 +11,21 @@
                     <input type="hidden" name="user_id" value="1">
                     <div class="form-group">
                         <label for="title">عنوان دوره</label>
-                        <input type="text" class="form-control w-50" name="title">
+                        <input type="text" class="form-control w-50" name="title" value="{{old('title')}}">
                     </div>
                     @error('title')
                     <span class="invalid-feedback my-3 d-block">{{$message}}</span>
                     @enderror
                     <div class="form-group">
                         <label for="content">توضیحات دوره</label>
-                        <textarea name="content" class="form-control" cols="30" rows="10"></textarea>
+                        <textarea name="content" class="form-control" cols="30" rows="10">{{old('content')}}</textarea>
                     </div>
                     @error('content')
                     <span class="invalid-feedback my-3 d-block">{{$message}}</span>
                     @enderror
                     <div class="form-group">
-                        <label for="price">قیمت دوره</label>
-                        <input type="number" class="form-control w-50" name="price">
+                        <label for="price">قیمت دروه (تومان)</label>
+                        <input type="number" class="form-control w-50" name="price" value="{{old('price')}}">
                     </div>
                     @error('price')
                     <span class="invalid-feedback my-3 d-block">{{$message}}</span>
@@ -58,6 +58,9 @@
                             @endforeach
                         </select>
                     </div>
+                    @error('category')
+                    <span class="invalid-feedback my-3 d-block">{{$message}}</span>
+                    @enderror
                     <button type="submit" class="btn btn-success w-25">ذخیره</button>
                     <a href="/admin/category" class="btn btn-danger w-25">بازگشت</a>
                 </form>

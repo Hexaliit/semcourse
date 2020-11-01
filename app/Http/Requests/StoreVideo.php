@@ -25,7 +25,7 @@ class StoreVideo extends FormRequest
     {
         return [
             'title' => 'required',
-            'video' => 'required|mimes:mp4,mpeg,avi'
+            'video' => 'required|mimes:mp4,mpeg,avi|file|max:7000'
         ];
     }
     public function messages()
@@ -33,7 +33,8 @@ class StoreVideo extends FormRequest
         return [
             'title.required' => 'عنوان ویدیو نمی تواند خالی باشد',
             'video.required' => 'این بخش اجباریست',
-            'video.mimes' => 'فرمت فایل پشتیبانی نمی شود'
+            'video.mimes' => 'فرمت فایل پشتیبانی نمی شود',
+            'video.max' => 'حجم ویدیو نمی تواند بیشتر از 7MB باشد'
         ];
     }
 }

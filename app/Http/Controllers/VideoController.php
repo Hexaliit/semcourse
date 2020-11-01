@@ -7,20 +7,32 @@ use App\Http\Requests\UpdateVideo;
 use App\Models\Course;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
     public function index(Course $course)
     {
-        $videos = $course->videos;
-        return view('video.index')
-            ->with('course',$course)
-            ->with('videos',$videos);
+        if (Auth::user()->id == $course->user_id or Auth::user()->level ==='مدیر')
+        {
+            $videos = $course->videos;
+            return view('video.index')
+                ->with('course',$course)
+                ->with('videos',$videos);
+        } else {
+            return redirect('/admin/course')->with('warning','دسترسی مجاز نیست');
+        }
     }
     public function create(Course $course)
     {
-        return view('video.create')->with('course',$course);
+        if (Auth::user()->id == $course->user_id or Auth::user()->level ==='مدیر')
+        {
+            return view('video.create')->with('course',$course);
+        } else {
+            return redirect('/admin/course')->with('warning','دسترسی مجاز نیست');
+        }
+
     }
     public function save(StoreVideo $request,Video $video)
     {
@@ -29,7 +41,7 @@ class VideoController extends Controller
         //make folder for course title
         $course = Course::where('id',$request->course_id)->first();
         if ($request->hasFile('video')) {
-            $videoPath = Storage::disk('uploads')->put('/video/' . $course->title, $request->file('video'));
+            $videoPath = Storage::disk('uploads')->put('/courses/' . $course->title, $request->file('video'));
             $video->video = 'http://localhost:8000/' . $videoPath;
         }
         $video->save();
@@ -38,9 +50,15 @@ class VideoController extends Controller
     }
     public function edit(Course $course,Video $video)
     {
-        return view('video.edit')
-            ->with('course',$course)
-            ->with('video',$video);
+        if (Auth::user()->id == $course->user_id or Auth::user()->level ==='مدیر')
+        {
+            return view('video.edit')
+                ->with('course',$course)
+                ->with('video',$video);
+        } else {
+            return redirect('/admin/course')->with('warning','دسترسی مجاز نیست');
+        }
+
     }
     public function update(UpdateVideo $request,Video $video)
     {
@@ -69,10 +87,16 @@ class VideoController extends Controller
     public function destroy(Video $video)
     {
         $course = Course::where('id',$video->course_id)->first();
-        $oldValue = str_replace('/','\\',ltrim($video->video,'http://localhost:8000/'));
-        unlink(dirname(storage_path()).'\\public\\'.$oldValue);
-        $video->delete();
-        return redirect('/admin/course')
-            ->with('success','ویدیو با موفقیت حذف شد');
+        if (Auth::user()->id == $course->user_id or Auth::user()->level ==='مدیر')
+        {
+            $oldValue = str_replace('/','\\',ltrim($video->video,'http://localhost:8000/'));
+            unlink(dirname(storage_path()).'\\public\\'.$oldValue);
+            $video->delete();
+            return redirect('/admin/course')
+                ->with('success','ویدیو با موفقیت حذف شد');
+        } else {
+            return redirect('/admin/course')->with('warning','دسترسی مجاز نیست');
+        }
+
     }
 }

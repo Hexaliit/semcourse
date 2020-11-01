@@ -10,6 +10,8 @@
                     {{csrf_field()}}
                     <input type="hidden" name="user_id" value="1">
                     <input type="hidden" name="_method" value="put">
+                    <input type="hidden" name="oldAvatar" value="{{$course->avatar}}">
+                    <input type="hidden" name="oldSource" value="{{$course->source}}">
                     <div class="form-group">
                         <label for="title">عنوان دوره</label>
                         <input type="text" class="form-control w-50" name="title" value="{{$course->title}}">

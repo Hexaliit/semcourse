@@ -15,14 +15,11 @@
                     <a class="nav-link mx-3" href="/admin/course">دوره ها</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-3" href="/admin/video">ویدئو ها</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link mx-3" href="#">کاربران</a>
+                    <a class="nav-link mx-3" href="/admin/user">کاربران</a>
                 </li>
             </ul>
         </div>
-        <a class="navbar-brand" href="#">Carousel</a>
+        <a class="btn btn-outline-light px-4" href="/logout">خروج</a>
 
     </nav>
 </header>

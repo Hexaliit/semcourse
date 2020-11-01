@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @include('inc.header')
     <div class="container">
         <div class="row">
             <div class="col-md-12 my-3 d-block"><a href="/course/{{str_replace(' ','-',$course->title)}}" class="text-info">{{$course->title}}</a> \ <span>{{$video->title}}</span></div>
@@ -11,6 +12,9 @@
                     <source src="{{$video->video}}" type="video/ogg">
                     Your browser does not support the video tag.
                 </video>
+                <div class="mt-5">
+                    <a href="/download/{{str_replace('/','-',$video->video)}}" class="text-center text-info d-block"><i class="fa fa-cloud-download mx-2"></i>دریافت ویدیو</a>
+                </div>
             </div>
             <div class="col-md-4 my-5 pt-4">
                 <div class="px-1 border">

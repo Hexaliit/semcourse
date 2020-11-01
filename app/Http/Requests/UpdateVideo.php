@@ -25,14 +25,15 @@ class UpdateVideo extends FormRequest
     {
         return [
             'title' => 'required',
-            'video' => 'mimes:mp4,mpeg,avi'
+            'video' => 'mimes:mp4,mpeg,avi|file|max:5000'
         ];
     }
     public function messages()
     {
         return [
             'title.required' => 'عنوان ویدیو نمی تواند خالی باشد',
-            'video.mimes' => 'فرمت فایل پشتیبانی نمی شود'
+            'video.mimes' => 'فرمت فایل پشتیبانی نمی شود',
+            'video.max' => 'حجم ویدیو نمی تواند بیشتر از 5MB باشد'
         ];
     }
 }

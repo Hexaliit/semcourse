@@ -27,8 +27,9 @@ class StoreCourse extends FormRequest
             'title' => 'required',
             'content' => 'required',
             'price' => 'required|numeric',
-            'avatar' => 'image',
-            'source' => 'file'
+            'avatar' => 'mimes:jpeg,bmp,png|max:1024',
+            'source' => 'mimes:pdf,txt,ppt,zip,rar|max:7000',
+            'category' => 'required'
         ];
     }
     public function messages()
@@ -38,8 +39,11 @@ class StoreCourse extends FormRequest
             'content.required' => 'محتوی دوره نمی تواند خالی باشد',
             'price.required' => 'قیمت دوره نمی تواند خالی باشد',
             'price.numeric' => 'قیمت باید فقط از اعداد تشکیل شود',
-            'avatar.image' => 'فایل آپلود شده حتما باید عکس باشد',
-            'source.file' => 'فایل آپلود شده قابل قبول نیست'
+            'avatar.mimes' => 'فرمت فایل پشتیبانی نمی شود',
+            'avatar.max' => 'حجم عکس نباید بیشتر از 1MB باشد',
+            'source.mimes' => 'فرمت فایل پشتیبانی نمی شود',
+            'source.max' => 'فحجم فایل نباید بیشتر از 7MB باشد',
+            'category.required' => 'دسته بندی اجباری می باشد'
         ];
     }
 }

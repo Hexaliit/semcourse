@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\Authenticate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 
@@ -18,17 +20,36 @@ Route::get('/', 'App\Http\Controllers\MainController@index');
 Route::get('/search','App\Http\Controllers\MainController@search');
 Route::get('/learn/{slug1?}/{slug2?}','App\Http\Controllers\LearnController@show');
 Route::get('/course/{slug1}/{slug2?}','App\Http\Controllers\CourseController@show');
+Route::get('/register','App\Http\Controllers\UserController@register');
+Route::get('/login','App\Http\Controllers\UserController@login');
+Route::post('/register','App\Http\Controllers\UserController@signUp');
+Route::post('/login','App\Http\Controllers\UserController@signIn');
+Route::get('/logout','App\Http\Controllers\UserController@logout');
+Route::get('/download/{source}','App\Http\Controllers\MainController@getDownload');
 
-Route::prefix('admin')->group(function () {
+
+Route::middleware(['UserCheck'])->prefix('/admin')->group(function (){
     Route::get('/',function (){
-        return \view('admin.dash-board');
+        return \view('admin.dash-board')->with('user',Auth::user());
     });
-    Route::get('/category','App\Http\Controllers\LearnController@index');
-    Route::post('/category','App\Http\Controllers\LearnController@save');
-    Route::get('/category/{category}/edit','App\Http\Controllers\LearnController@edit');
-    Route::put('/category/{category}','App\Http\Controllers\learnController@update');
-    Route::delete('/category/{category}','App\Http\Controllers\LearnController@destroy');
-    Route::get('/category/create','App\Http\Controllers\LearnController@create');
+    Route::group(['middleware' => 'AdminCheck'],function (){
+        Route::get('/category','App\Http\Controllers\LearnController@index');
+        Route::post('/category','App\Http\Controllers\LearnController@save');
+        Route::get('/category/{category}/edit','App\Http\Controllers\LearnController@edit');
+        Route::put('/category/{category}','App\Http\Controllers\learnController@update');
+        Route::delete('/category/{category}','App\Http\Controllers\LearnController@destroy');
+        Route::get('/category/create','App\Http\Controllers\LearnController@create');
+
+
+
+        Route::get('/user','App\Http\Controllers\UserController@index');
+        Route::get('/user/{user}/edit','App\Http\Controllers\UserController@edit');
+        Route::put('/user/{user}','App\Http\Controllers\UserController@update');
+        Route::delete('/user/{user}','App\Http\Controllers\UserController@destroy');
+    });
+
+
+
 
 
 

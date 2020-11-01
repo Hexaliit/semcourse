@@ -11,6 +11,13 @@
                 </div>
                 <br>
             @endif
+                @if (Session::has('warning'))
+                    <div class="alert alert-success mt-2" role="alert">
+                        {{Session::get('warning')}}
+                        <a href="/admin/course" class="close">&times;</a>
+                    </div>
+                    <br>
+                @endif
             <h5>دوره ها </h5>
             <hr>
             <a href="/admin/course/create" class="btn btn-success btn-lg"><i class="fa fa-plus">  دوره جدید</i></a>
