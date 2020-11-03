@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCourse;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -157,14 +158,46 @@ class CourseController extends Controller
             $course = Course::where('title', $slug1)->firstOrFail();
             $courseId = $course->id;
             $video = Video::where('title', $slug2)->where('course_id', $courseId)->firstOrFail();
-            $videos = $course->videos;
-            return view('video.show')
-                ->with('videos', $videos)
-                ->with('course', $course)
-                ->with('video', $video);
-
-
+            if ($video->show_on_demo == 1){
+                $videos = $course->videos;
+                return view('video.show')
+                    ->with('videos', $videos)
+                    ->with('course', $course)
+                    ->with('video', $video);
+            } else {
+                //checking if the user has th course
+                $videos = $course->videos;
+                $id = $video->course->id;
+                $courses = Auth::user()->courses;
+                foreach ($courses as $course)
+                {
+                    if ($course->id == $id)
+                    {
+                        return view('video.show')
+                            ->with('videos', $videos)
+                            ->with('course', $course)
+                            ->with('video', $video);
+                    }
+                }
+                return redirect()->back()->with('warning','شما این دوره را خریداری نکرده اید');
+            }
         }
+    }
+    public function buy($user_id,$course_id)
+    {
+        $user = User::find($user_id);
+        $course = Course::find($course_id);
+        if ($user->balance < $course->price)
+        {
+            return redirect()->back()->with('warning','موجودی شما کافی نیست');
+        } else {
+            //mines value price of course from user's balance
+            $user->balance = $user->balance - $course->price;
+            $user->save();
+            DB::table('course_user')->insert(['course_id' => $course->id,'user_id' => $user->id,'created_at' => now(),'updated_at' => now()]);
+            return redirect('/learn')->with('success','دوره با موفقیت خریداری شد');
+        }
+
     }
 
 }

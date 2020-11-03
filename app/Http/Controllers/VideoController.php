@@ -36,6 +36,10 @@ class VideoController extends Controller
     }
     public function save(StoreVideo $request,Video $video)
     {
+        if (isset($request->show_on_demo))
+        {
+            $video->show_on_demo = $request->show_on_demo;
+        }
         $video->course_id = $request->course_id;
         $video->title = $request->title;
         //make folder for course title
@@ -62,6 +66,10 @@ class VideoController extends Controller
     }
     public function update(UpdateVideo $request,Video $video)
     {
+        if (isset($request->show_on_demo))
+        {
+            $video->show_on_demo = $request->show_on_demo;
+        }
         $video->title = $request->title;
         $video->course_id = $request->course_id;
         //make folder for course title

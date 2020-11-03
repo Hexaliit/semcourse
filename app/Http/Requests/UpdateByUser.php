@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUser extends FormRequest
+class UpdateByUser extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,18 +24,14 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => 'required|email',
-            'balance' => 'numeric'
+            'name' => 'required|max:255'
         ];
     }
     public function messages()
     {
         return [
             'name.required' => 'نام نمی تواند خالی باشد',
-            'email.required' => 'ایمیل احباری می باشد',
-            'email.email' => 'ورودی باید فرمت ایمیل باشد',
-            'balance.numeric' => 'موجودی کاربر باید عدد یاشد'
+            'name.max' => 'طول نام خیلی زیاد است'
         ];
     }
 }

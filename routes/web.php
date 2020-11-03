@@ -26,6 +26,12 @@ Route::post('/register','App\Http\Controllers\UserController@signUp');
 Route::post('/login','App\Http\Controllers\UserController@signIn');
 Route::get('/logout','App\Http\Controllers\UserController@logout');
 Route::get('/download/{source}','App\Http\Controllers\MainController@getDownload');
+Route::post('/buy/{user}/{course}','App\Http\Controllers\CourseController@buy');
+Route::get('/account','App\Http\Controllers\UserController@account');
+Route::get('/account/edit','App\Http\Controllers\UserController@editByUser');
+Route::get('/account/edit-password','App\Http\Controllers\UserController@editPassword');
+Route::put('/account','App\Http\Controllers\UserController@updatePassword');
+Route::put('/account/edit','App\Http\Controllers\UserController@updateByUser');
 
 
 Route::middleware(['UserCheck'])->prefix('/admin')->group(function (){

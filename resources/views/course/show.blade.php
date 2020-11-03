@@ -18,6 +18,13 @@
         </div>
     </div>
     <div class="container-fluid">
+        @if (Session::has('warning'))
+            <div class="alert alert-danger mt-2" role="alert">
+                {{Session::get('warning')}}
+                <a href="" class="close">&times;</a>
+            </div>
+            <br>
+        @endif
         <div class="row">
             <div class="col-md-8">
                 <div class="border p-2 my-3">
@@ -33,8 +40,20 @@
                     @endforeach
                 </div>
                 <div class="py-3 border my-3">
-                    <h5 class="pb-2 d-block pr-2 text-center border-bottom">منتشر شده توسط</h5>
-                    <h5 class="d-block py-2 text-primary text-center">{{$name}}</h5>
+                    <div class="d-flex justify-content-around my-2">
+                        <span>مدرس دوره</span>
+                        <span>{{$name}}</span>
+                    </div>
+                    <div class="d-flex justify-content-around my-2">
+                        <span>هزینه دوره</span>
+                        <span>{{($course->price != 0 ) ? $course->price : 'رایگان'}} تومان</span>
+                    </div>
+                    @if ($course->price != 0)
+                        <form action="/buy/{{Auth::user()->id}}/{{$course->id}}" method="POST">
+                            {{csrf_field()}}
+                            <button class="btn btn-success w-100" type="submit">خرید دوره</button>
+                        </form>
+                    @endif
                 </div>
                 <div class="py-3 border my-3">
                     <h5 class="pb-2 d-block pr-2 text-center border-bottom">درسنامه</h5>
@@ -58,7 +77,7 @@
                 فیلم های آموزشی
             </h5>
             @foreach ($videos as $video)
-                <a href="/course/{{str_replace(' ','-',$course->title)}}/{{str_replace(' ','-',$video->title)}}" class="text-info border-bottom p-3 d-block"><i class="fa fa-play-circle pl-3"></i>{{$video->title}}</a>
+                <a href="/course/{{str_replace(' ','-',$course->title)}}/{{str_replace(' ','-',$video->title)}}" class="text-info border-bottom p-3 d-block"><i class="fa fa-play-circle pl-3"></i>{{$video->title}}<i class="float-left fa {{($video->show_on_demo == 0 ? 'fa-lock' : 'fa-unlock')}}"></i></a>
             @endforeach
         </div>
     </div>

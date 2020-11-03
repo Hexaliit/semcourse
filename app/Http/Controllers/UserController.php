@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUser;
+use App\Http\Requests\UpdateByUser;
+use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -72,4 +74,41 @@ class UserController extends Controller
         $user->save();
         return redirect('/admin/user')->with('success','کاربر با موفقیت ویرایش شد');
     }
+    public function account()
+    {
+        $user = Auth::user();
+        $courses = $user->courses;
+        return view('user.profile')->with('user',$user)->with('courses',$courses);
+    }
+    public function editByUser()
+    {
+        $user = Auth::user();
+        return view('user.edit-by-user')->with('user',$user);
+    }
+    public function editPassword()
+    {
+        $user = Auth::user();
+        return view('user.edit-password')->with('user',$user);
+    }
+    public function updatePassword(UpdatePassword $request)
+    {
+        $user = Auth::user();
+        //check if the old one is correct
+        if (password_verify($request->oldPass,$user->password))
+        {
+            $user->password = password_hash($request->password,PASSWORD_DEFAULT);
+            $user->save();
+            return redirect('/')->with('success','رمز عبور با موفقیت ویریاش شد');
+        } else {
+            return redirect()->back()->with('warning','رمز قبلی صحیح نیست');
+        }
+    }
+    public function updateByUser(UpdateByUser $request)
+    {
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->save();
+        return redirect('/')->with('success','کاربر با موفقیت ویرایش شد');
+    }
+
 }

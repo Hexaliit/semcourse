@@ -18,7 +18,7 @@ class CreateCoursesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->string('title');
             $table->text('content');
-            $table->unsignedInteger('price')->nullable()->default(null);
+            $table->unsignedInteger('price')->default(0);
             $table->string('avatar')->nullable();
             $table->string('source')->nullable();
             $table->timestamps();

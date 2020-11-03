@@ -18,6 +18,7 @@ class CreateVideosTable extends Migration
             $table->unsignedInteger('course_id');
             $table->string('title');
             $table->string('video');
+            $table->boolean('show_on_demo')->default(1);
             $table->timestamps();
         });
     }

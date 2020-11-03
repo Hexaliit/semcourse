@@ -13,9 +13,13 @@ class User extends Authenticatable
     use Notifiable;
     protected $fillable = ['name', 'email', 'password'];
 
-    public function courses()
+    public function corses()
     {
         return $this->hasMany(Course::class,'user_id');
+    }
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
     }
 }
 

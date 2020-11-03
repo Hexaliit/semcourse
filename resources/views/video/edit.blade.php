@@ -24,6 +24,15 @@
                     @error('video')
                     <span class="invalid-feedback my-3 d-block">{{$message}}</span>
                     @enderror
+                    @if ($course->price != 0)
+                        <div class="form-group">
+                            <label for="show_on_demo">نمایش در دمو</label>
+                            <select class="form-control w-50" name="show_on_demo">
+                                <option value="0" {{ ( $video->show_on_demo == 0 ) ? 'selected' : '' }}>خیر</option>
+                                <option value="1" {{ ( $video->show_on_demo == 1 ) ? 'selected' : '' }}>بله</option>
+                            </select>
+                        </div>
+                    @endif
                     <button type="submit" class="btn btn-success w-25 mt-3">ذخیره</button>
                     <a href="/admin/course/{{$course->id}}/video" class="btn btn-danger w-25 mt-3">بازگشت</a>
                 </form>
