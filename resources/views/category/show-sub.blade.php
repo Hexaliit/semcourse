@@ -9,7 +9,7 @@
             <div class="col-md-8">
                 <ul>
                     @foreach($subCategories as $category)
-                        <li class="p-3"><a href="/learn/{{$orgCategory->name}}/{{$category->name}}" class="text-info w-100 py-3 px-5"><i class="fa fa-check text-primary ml-3"></i>{{$category->name}}</a></li>
+                        <li class="p-3"><a href="/category/{{$orgCategory->name}}/{{$category->name}}" class="text-info w-100 py-3 px-5"><i class="fa fa-check text-primary ml-3"></i>{{$category->name}}</a></li>
                     @endforeach
                 </ul>
             </div>

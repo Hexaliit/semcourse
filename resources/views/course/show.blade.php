@@ -19,9 +19,9 @@
     </div>
     <div class="container-fluid">
         @if (Session::has('warning'))
-            <div class="alert alert-danger mt-2" role="alert">
+            <div class="alert alert-danger mt-2" role="alert" id="alert-block">
                 {{Session::get('warning')}}
-                <a href="" class="close">&times;</a>
+                <a class="btn p-0 close" id="close-btn">&times;</a>
             </div>
             <br>
         @endif
@@ -46,13 +46,17 @@
                     </div>
                     <div class="d-flex justify-content-around my-2">
                         <span>هزینه دوره</span>
-                        <span>{{($course->price != 0 ) ? $course->price : 'رایگان'}} تومان</span>
+                        <span>{{($course->price != 0 ) ? $course->price.' تومان' : 'رایگان'}}</span>
                     </div>
                     @if ($course->price != 0)
-                        <form action="/buy/{{Auth::user()->id}}/{{$course->id}}" method="POST">
-                            {{csrf_field()}}
-                            <button class="btn btn-success w-100" type="submit">خرید دوره</button>
-                        </form>
+                        @if (Auth::user())
+                            <form action="/buy/{{Auth::user()->id}}/{{$course->id}}" method="POST">
+                                {{csrf_field()}}
+                                <button class="btn btn-success w-100" type="submit">خرید دوره</button>
+                            </form>
+                            @else
+                            <a href="/login" class="btn btn-success w-100">برای خرید باید وارد سایت شوید</a>
+                        @endif
                     @endif
                 </div>
                 <div class="py-3 border my-3">

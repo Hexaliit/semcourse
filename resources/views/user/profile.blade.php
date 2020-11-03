@@ -6,8 +6,9 @@
         <div class="row">
             <div class="col-md-12 mt-4">
                 @if (Session::has('success'))
-                    <div class="alert alert-success mt-2" role="alert">
+                    <div class="alert alert-danger mt-2" role="alert" id="alert-block">
                         {{Session::get('success')}}
+                        <a class="btn p-0 close" id="close-btn">&times;</a>
                     </div>
                     <br>
                 @endif
@@ -23,10 +24,10 @@
                     <h5 class="d-block py-2 border-bottom">دوره های شما</h5>
                     @if (count($courses) > 0)
                         @foreach($courses as $course)
-                            <span class="text-info d-block my-2">{{$course->title}}</span>
+                            <a href="/course/{{str_replace(' ','-',$course->title)}}" class="text-info d-block my-2">{{$course->title}}</a>
                         @endforeach
                         @else
-                        <span class="text-warning d-block">شما هیچ دوره ای خریداری نکرده اید</span>
+                        <span class="text-muted d-block">شما هیچ دوره ای خریداری نکرده اید</span>
                     @endif
                 </div>
             </div>

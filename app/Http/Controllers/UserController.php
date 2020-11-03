@@ -38,7 +38,7 @@ class UserController extends Controller
             return redirect('/');
         } else
         {
-            return redirect()->back()->with('warning','نام کاربری یا کلمه عبور اشتباه است');
+            return redirect()->back()->with('warning','ایمیل یا کلمه عبور اشتباه است');
         }
     }
     public function logout()

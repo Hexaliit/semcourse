@@ -9,7 +9,7 @@
                 <ul>
                     @foreach($mainCategories as $category)
                         <li>
-                            <a href="/learn/{{$category->name}}" class="text-info  d-block py-4"><i class="fa fa-check text-primary ml-3"></i>{{$category->name}}</a>
+                            <a href="/category/{{$category->name}}" class="text-info  d-block py-4"><i class="fa fa-check text-primary ml-3"></i>{{$category->name}}</a>
                         </li>
                     @endforeach
                 </ul>

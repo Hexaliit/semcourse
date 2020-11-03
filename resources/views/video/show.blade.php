@@ -3,6 +3,13 @@
 @section('content')
     @include('inc.header')
     <div class="container">
+        @if (Session::has('warning'))
+            <div class="alert alert-danger mt-2" role="alert">
+                {{Session::get('warning')}}
+                <a href="" class="close">&times;</a>
+            </div>
+            <br>
+        @endif
         <div class="row">
             <div class="col-md-12 my-3 d-block"><a href="/course/{{str_replace(' ','-',$course->title)}}" class="text-info">{{$course->title}}</a> \ <span>{{$video->title}}</span></div>
             <div class="col-md-8">

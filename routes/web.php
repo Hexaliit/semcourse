@@ -18,7 +18,7 @@ use Illuminate\View\View;
 
 Route::get('/', 'App\Http\Controllers\MainController@index');
 Route::get('/search','App\Http\Controllers\MainController@search');
-Route::get('/learn/{slug1?}/{slug2?}','App\Http\Controllers\LearnController@show');
+Route::get('/category/{slug1?}/{slug2?}','App\Http\Controllers\CategoryController@show');
 Route::get('/course/{slug1}/{slug2?}','App\Http\Controllers\CourseController@show');
 Route::get('/register','App\Http\Controllers\UserController@register');
 Route::get('/login','App\Http\Controllers\UserController@login');
@@ -39,12 +39,12 @@ Route::middleware(['UserCheck'])->prefix('/admin')->group(function (){
         return \view('admin.dash-board')->with('user',Auth::user());
     });
     Route::group(['middleware' => 'AdminCheck'],function (){
-        Route::get('/category','App\Http\Controllers\LearnController@index');
-        Route::post('/category','App\Http\Controllers\LearnController@save');
-        Route::get('/category/{category}/edit','App\Http\Controllers\LearnController@edit');
-        Route::put('/category/{category}','App\Http\Controllers\learnController@update');
-        Route::delete('/category/{category}','App\Http\Controllers\LearnController@destroy');
-        Route::get('/category/create','App\Http\Controllers\LearnController@create');
+        Route::get('/category','App\Http\Controllers\CategoryController@index');
+        Route::post('/category','App\Http\Controllers\CategoryController@save');
+        Route::get('/category/{category}/edit','App\Http\Controllers\CategoryController@edit');
+        Route::put('/category/{category}','App\Http\Controllers\CategoryController@update');
+        Route::delete('/category/{category}','App\Http\Controllers\CategoryController@destroy');
+        Route::get('/category/create','App\Http\Controllers\CategoryController@create');
 
 
 

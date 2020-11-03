@@ -9,8 +9,9 @@
                     <h5 class="d-block">تغییر رمز عبور</h5>
                     <hr>
                     @if (Session::has('warning'))
-                        <div class="alert alert-danger mt-2" role="alert">
+                        <div class="alert alert-danger mt-2" role="alert" id="alert-block">
                             {{Session::get('warning')}}
+                            <a class="btn p-0 close" id="close-btn">&times;</a>
                         </div>
                         <br>
                     @endif

@@ -6,7 +6,7 @@ use App\Http\Requests\StoreCategory;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class LearnController extends Controller
+class CategoryController extends Controller
 {
     public function index()
     {
@@ -64,16 +64,18 @@ class LearnController extends Controller
 
     public function destroy($id)
     {
-        $cat = Category::find($id);
-        $children = $cat->children;
+        $category = Category::find($id);
+        $children = $category->children;
         if (count($children) > 0)
         {
-            foreach ($children as $childs)
+            foreach ($children as $child)
             {
-                $childs->delete();
+                $child->courses()->detach();
+                $child->delete();
             }
         }
-        $cat->delete();
+        $category->courses()->detach();
+        $category->delete();
         return redirect('/admin/category')->with('success','دسته بندی با موفقیت حذف شد');
     }
 

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    @include('inc.header')
     <div class="container">
         @if (!empty($courses) && count($courses) > 0)
             <h3 class="my-3 text-info">{{count($courses)}}  نتیجه برای "{{$searchTerm}}"</h3>
@@ -9,7 +10,7 @@
                     <div class="col-md-4 my-3">
                         <div class="card">
                             <img class="card-img-top"
-                                 src="{{--{{$course->avatar}}--}}http://localhost:8000/image/main.jpg"
+                                 src="{{$course->avatar}}"
                                  alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">{{$course->title}}</h5>

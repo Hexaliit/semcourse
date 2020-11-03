@@ -50,7 +50,7 @@ class CourseController extends Controller
             $avatarPath = Storage::disk('uploads')->put('/courses/' . $request->title, $request->file('avatar'));
             $course->avatar = 'http://localhost:8000/' . $avatarPath;
         } else {
-            $course->avatar = null;
+            $course->avatar = 'http://localhost:8000/image/main.jpg';
         }
 
         if ($request->hasFile('source')) {
@@ -121,13 +121,16 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         if (Auth::user()->id == $course->user_id or Auth::user()->level === 'مدیر') {
+            //delete all videos of the course
             $courseVideos = $course->videos;
             if (count($courseVideos) > 0) {
                 foreach ($courseVideos as $video) {
                     $video->delete();
                 }
             }
-            $cat = DB::table('category_course')->where('course_id', $course->id)->delete();
+            //detach courses from category_course table
+            $course->categories()->detach();
+            //delete directory of the course
             File::deleteDirectory(dirname(storage_path()) . '\\public\\courses\\' . $course->title);
             $course->delete();
             return redirect('/admin/course')->with('success', 'دوره با موفقیت حذف شد');
@@ -166,20 +169,24 @@ class CourseController extends Controller
                     ->with('video', $video);
             } else {
                 //checking if the user has th course
-                $videos = $course->videos;
-                $id = $video->course->id;
-                $courses = Auth::user()->courses;
-                foreach ($courses as $course)
+                if (Auth::user())
                 {
-                    if ($course->id == $id)
+                    $videos = $course->videos;
+                    $id = $video->course->id;
+                    $courses = Auth::user()->courses;
+                    foreach ($courses as $course)
                     {
-                        return view('video.show')
-                            ->with('videos', $videos)
-                            ->with('course', $course)
-                            ->with('video', $video);
+                        if ($course->id == $id)
+                        {
+                            return view('video.show')
+                                ->with('videos', $videos)
+                                ->with('course', $course)
+                                ->with('video', $video);
+                        }
                     }
+                    return redirect()->back()->with('warning','شما این دوره را خریداری نکرده اید');
                 }
-                return redirect()->back()->with('warning','شما این دوره را خریداری نکرده اید');
+                return redirect('/login')->with('login','برای دسترسی به این بخش باید وارد سایت شوید');
             }
         }
     }
@@ -191,11 +198,19 @@ class CourseController extends Controller
         {
             return redirect()->back()->with('warning','موجودی شما کافی نیست');
         } else {
-            //mines value price of course from user's balance
-            $user->balance = $user->balance - $course->price;
-            $user->save();
-            DB::table('course_user')->insert(['course_id' => $course->id,'user_id' => $user->id,'created_at' => now(),'updated_at' => now()]);
-            return redirect('/learn')->with('success','دوره با موفقیت خریداری شد');
+            //if user already has the course
+            $bought = DB::table('course_user')->where('course_id',$course_id)->where('user_id',$user_id)->get();
+            if (count($bought) > 0)
+            {
+                return redirect()->back()->with('warning','شما قبلا این دوره را خریده اید');
+            } else {
+                //mines value price of course from user's balance
+                $user->balance = $user->balance - $course->price;
+                $user->save();
+                //attaching to course_user table
+                $user->courses()->attach($course->id);
+                return redirect('/category')->with('success','دوره با موفقیت خریداری شد');
+            }
         }
 
     }

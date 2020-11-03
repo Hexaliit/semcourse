@@ -5,9 +5,9 @@
     <div class="container">
         <div class="col-md-12">
             @if (Session::has('success'))
-                <div class="alert alert-success mt-2" role="alert">
+                <div class="alert alert-danger mt-2" role="alert" id="alert-block">
                     {{Session::get('success')}}
-                    <a href="/admin/user" class="close">&times;</a>
+                    <a class="btn p-0 close" id="close-btn">&times;</a>
                 </div>
                 <br>
             @endif
