@@ -2,6 +2,13 @@
 
 @section('content')
     @include('inc.header')
+    @if (Session::has('success'))
+        <div class="alert alert-success mt-2" role="alert" id="alert-block">
+            {{Session::get('success')}}
+            <a class="btn p-0 close" id="close-btn">&times;</a>
+        </div>
+        <br>
+    @endif
     <div id="myCarousel" class="carousel slide h-100" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -65,7 +72,7 @@
                 <div class="col-md-3">
                     <div class="card">
                         <img class="card-img-top card-image"
-                             src="{{($new->avatar !=null) ? $new->avatar : 'http://localhost:8000/image/main.jpg'}}"
+                             src="{{$new->avatar}}"
                              alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">{{$new->title}}</h5>
@@ -87,7 +94,7 @@
                 <div class="col-md-3">
                     <div class="card">
                         <img class="card-img-top card-image"
-                             src="{{($free->avatar !=null) ? $free->avatar : 'http://localhost:8000/image/main.jpg'}}"
+                             src="{{$free->avatar}}"
                              alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">{{$free->title}}</h5>
@@ -102,15 +109,4 @@
             @endforeach
         </div>
     </div>
-
-    {{--
-        <div class="mt-5">
-            @if (Auth::user())
-                {{Auth::user()->name}}
-                <p>{{Auth::user()->level}}</p>
-                <a href="/logout" class="btn btn-danger d-block">خروج</a>
-            @endif
-        </div>
-    --}}
-
 @stop

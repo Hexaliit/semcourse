@@ -97,8 +97,8 @@ class VideoController extends Controller
         $course = Course::where('id',$video->course_id)->first();
         if (Auth::user()->id == $course->user_id or Auth::user()->level ==='مدیر')
         {
-            $oldValue = str_replace('/','\\',ltrim($video->video,'http://localhost:8000/'));
-            unlink(dirname(storage_path()).'\\public\\'.$oldValue);
+            $oldValue = str_replace('/','\\',ltrim($video->video,'http://localhost:8000/courses'));
+            unlink(dirname(storage_path()).'\\public\\courses\\'.$oldValue);
             $video->delete();
             return redirect('/admin/course')
                 ->with('success','ویدیو با موفقیت حذف شد');

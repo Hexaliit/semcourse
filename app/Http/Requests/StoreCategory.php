@@ -24,13 +24,15 @@ class StoreCategory extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|alpha'
+            'name' => 'required|alpha|min:3|max:32'
         ];
     }
     public function messages()
     {
         return [
             'name.required' => 'نام دسته بندی نمی تواند خالی باشد',
+            'name.min' => 'نام دسته بندی باید حداقل ۳ کاراکتر باشد',
+            'name.max' => 'نام دسته بندی باید خداکثر ۳۲ کاراکتر باشد',
             'name.alpha' => 'نام باید کاملا از حروف باشد'
         ];
     }

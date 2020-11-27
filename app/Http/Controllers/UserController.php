@@ -34,11 +34,10 @@ class UserController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            // Authentication passed...
             return redirect('/');
         } else
         {
-            return redirect()->back()->with('warning','ایمیل یا کلمه عبور اشتباه است');
+            return redirect()->back()->with('warning','ایمیل یا رمز عبور اشتباه است');
         }
     }
     public function logout()

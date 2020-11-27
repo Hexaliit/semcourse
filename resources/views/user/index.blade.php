@@ -5,7 +5,7 @@
     <div class="container">
         <div class="col-md-12">
             @if (Session::has('success'))
-                <div class="alert alert-danger mt-2" role="alert" id="alert-block">
+                <div class="alert alert-success mt-2" role="alert" id="alert-block">
                     {{Session::get('success')}}
                     <a class="btn p-0 close" id="close-btn">&times;</a>
                 </div>
@@ -19,7 +19,6 @@
                     <th>سطح</th>
                     <th>موجودی</th>
                     <th>ویرایش</th>
-                    <th>حذف</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,13 +28,6 @@
                         <td>{{$user->level}}</td>
                         <td>{{$user->balance}}</td>
                         <td><a href="/admin/user/{{$user->id}}/edit" class="btn btn-primary">ویرایش</a></td>
-                        <td>
-                            <form action="/admin/user/{{$user->id}}" method="POST">
-                                {{csrf_field()}}
-                                <input type="hidden" name="_method" value="delete">
-                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash ml-1"></i>حذف</button>
-                            </form>
-                        </td>
                     </tr>
                 @endforeach
                 </tbody>

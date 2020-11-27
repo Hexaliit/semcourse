@@ -19,7 +19,6 @@
                 </li>
             </ul>
         </div>
-        <a class="btn btn-outline-light px-4" href="/logout">خروج</a>
-
+        <a class="btn btn-outline-light px-4" href="/logout"><i class="fa fa-sign-out ml-2"></i>خروج</a>
     </nav>
 </header>

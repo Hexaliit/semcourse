@@ -79,23 +79,23 @@ class CategoryController extends Controller
         return redirect('/admin/category')->with('success','دسته بندی با موفقیت حذف شد');
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function show($slug1=null,$slug2=null)
+    public function showCourses($slug1,$slug2)
+    {
+        $category = Category::where('name', $slug2)->firstOrFail();
+        $par = Category::where('name', $slug1)->first();
+        if ($par && $category->parent_id === $par->id) {
+            $courses = $category->courses;
+            $reversed = $courses->reverse();
+            $courses = $reversed->values()->all();
+            return \view('category.show-courses')
+                ->with('courses', $courses)
+                ->with('category', $category)
+                ->with('parent', $par);
+        } else {
+            return abort(404);
+        }
+    }
+    public function showCategory($slug1=null,$slug2=null)
     {
         if ($slug1 == null && $slug2 == null) {
             $mainCategories = Category::whereNull('parent_id')->get();
@@ -104,19 +104,8 @@ class CategoryController extends Controller
             $orgCategory = Category::where('name', $slug1)->first();
             $subCategories = $orgCategory->children;
             return \view('category.show-sub')->with('subCategories', $subCategories)->with('orgCategory', $orgCategory);
-
         } else {
-            $category = Category::where('name', $slug2)->firstOrFail();
-            $par = Category::where('name', $slug1)->first();
-            if ($par && $category->parent_id === $par->id) {
-                $courses = $category->courses;
-                return \view('category.show-courses')
-                    ->with('courses', $courses)
-                    ->with('category', $category)
-                    ->with('parent', $par);
-            } else {
-                return abort(404);
-            }
+            return $this->showCourses($slug1,$slug2);
         }
     }
 }

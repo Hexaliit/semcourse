@@ -24,14 +24,6 @@ class MainController extends Controller
             ->with('frees',$frees)
             ->with('newest',$newest);
     }
-    public function search(Request $request)
-    {
-        $searchTerm = $request->search;
-        $courses = Course::whereRaw('match(title,content) against (? in Boolean mode)',$searchTerm)->get();
-        return view('inc.search')
-            ->with('courses',empty($courses) ? '' : $courses)
-            ->with('searchTerm',$searchTerm);
-    }
     public function getDownload($source)
     {
         $filePath = dirname(storage_path()).'\public\\courses\\'.str_replace('-','\\',ltrim($source,'http:--localhost:8000-courses-'));

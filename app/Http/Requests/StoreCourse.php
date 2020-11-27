@@ -24,10 +24,10 @@ class StoreCourse extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'title' => 'required|unique:courses',
             'content' => 'required',
             'price' => 'required|numeric',
-            'avatar' => 'mimes:jpeg,bmp,png|max:1024',
+            'avatar' => 'mimes:jpeg,bmp,png,jpg|max:1024',
             'source' => 'mimes:pdf,txt,ppt,zip,rar|max:7000',
             'category' => 'required'
         ];
@@ -36,6 +36,7 @@ class StoreCourse extends FormRequest
     {
         return [
             'title.required' => 'عنوان دوره نمی تواند خالی باشد',
+            'title.unique' => 'عنوان دوره از قبل وجود دارد',
             'content.required' => 'محتوی دوره نمی تواند خالی باشد',
             'price.required' => 'قیمت دوره نمی تواند خالی باشد',
             'price.numeric' => 'قیمت باید فقط از اعداد تشکیل شود',

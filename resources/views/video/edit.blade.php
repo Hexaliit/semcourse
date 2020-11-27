@@ -5,6 +5,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h5 class="d-block">ویرایش ویدئو</h5>
+                <hr>
                 <form action="/admin/video/{{$video->id}}" class="my-4" method="POST" enctype="multipart/form-data">
                     {{csrf_field()}}
                     <input type="hidden" name="course_id" value="{{$course->id}}">

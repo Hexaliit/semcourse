@@ -21,7 +21,7 @@
             <h5>دوره ها </h5>
             <hr>
             <a href="/admin/course/create" class="btn btn-success btn-lg"><i class="fa fa-plus">  دوره جدید</i></a>
-            <table class="table mt-4">
+            <table class="table mt-4 w-100">
                 <thead>
                 <tr>
                     <th>عنوان</th>

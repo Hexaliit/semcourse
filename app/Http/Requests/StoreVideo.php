@@ -24,7 +24,7 @@ class StoreVideo extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'title' => 'required|min:3|max:32',
             'video' => 'required|mimes:mp4,mpeg,avi|file|max:7000'
         ];
     }
@@ -32,6 +32,8 @@ class StoreVideo extends FormRequest
     {
         return [
             'title.required' => 'عنوان ویدیو نمی تواند خالی باشد',
+            'title.min' => 'عنوان ویدیو حداقل ۳ کاراکتر است',
+            'title.max' => 'عنوان ویدیو حداکثر ۳۲ کاراکتر است',
             'video.required' => 'این بخش اجباریست',
             'video.mimes' => 'فرمت فایل پشتیبانی نمی شود',
             'video.max' => 'حجم ویدیو نمی تواند بیشتر از 7MB باشد'

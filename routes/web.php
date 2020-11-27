@@ -17,9 +17,9 @@ use Illuminate\View\View;
 */
 
 Route::get('/', 'App\Http\Controllers\MainController@index');
-Route::get('/search','App\Http\Controllers\MainController@search');
-Route::get('/category/{slug1?}/{slug2?}','App\Http\Controllers\CategoryController@show');
-Route::get('/course/{slug1}/{slug2?}','App\Http\Controllers\CourseController@show');
+Route::get('/search','App\Http\Controllers\CourseController@search');
+Route::get('/category/{slug1?}/{slug2?}','App\Http\Controllers\CategoryController@showCategory');
+Route::get('/course/{slug1}/{slug2?}','App\Http\Controllers\CourseController@showCourse');
 Route::get('/register','App\Http\Controllers\UserController@register');
 Route::get('/login','App\Http\Controllers\UserController@login');
 Route::post('/register','App\Http\Controllers\UserController@signUp');
@@ -32,7 +32,9 @@ Route::get('/account/edit','App\Http\Controllers\UserController@editByUser');
 Route::get('/account/edit-password','App\Http\Controllers\UserController@editPassword');
 Route::put('/account','App\Http\Controllers\UserController@updatePassword');
 Route::put('/account/edit','App\Http\Controllers\UserController@updateByUser');
-
+Route::get('/aboutus',function (){
+    return \view('about-us');
+});
 
 Route::middleware(['UserCheck'])->prefix('/admin')->group(function (){
     Route::get('/',function (){

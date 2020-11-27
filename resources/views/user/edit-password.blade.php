@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-
+    @include('inc.header')
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-md-6">
-                <div class="p-5 border">
+                <div class="p-5 mt-2 border">
                     <h5 class="d-block">تغییر رمز عبور</h5>
                     <hr>
                     @if (Session::has('warning'))

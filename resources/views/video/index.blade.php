@@ -19,7 +19,7 @@
                         <thead>
                         <tr>
                             <th>عنوان ویدیو</th>
-                            <th>نمایش ویدئو</th>
+                            {{--<th>نمایش ویدئو</th>--}}
                             <th>ویرایش</th>
                             <th>حذف</th>
                         </tr>
@@ -28,7 +28,7 @@
                         @foreach($videos as $video)
                             <tr>
                                 <td>{{$video->title}}</td>
-                                <td><a href="/admin/video/{{$video->id}}/display" class="btn btn-primary"><i class="fa fa-certificate"></i>نمایش</a></td>
+                                {{--<td><a href="/admin/video/{{$video->id}}/display" class="btn btn-primary"><i class="fa fa-certificate"></i>نمایش</a></td>--}}
                                 <td><a href="/admin/course/{{$course->id}}/video/{{$video->id}}/edit" class="btn btn-warning"><i class="fa fa-wrench"></i>ویرایش</a></td>
                                 <td>
                                     <form action="/admin/video/{{$video->id}}" method="POST">

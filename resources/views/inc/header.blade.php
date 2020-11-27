@@ -13,7 +13,7 @@
                     <a class="nav-link" href="/category">دسته بندی</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">درباره ما</a>
+                    <a class="nav-link" href="/aboutus">درباره ما</a>
                 </li>
                 @if (Auth::user())
                     <li class="nav-item">
@@ -34,8 +34,8 @@
             <form class="form-inline mt-2 mt-md-0" method="GET" action="/search">
                 <input class="form-control mr-sm-2" type="text" placeholder="دنبال جه هستید" aria-label="Search"
                        name="search">
-                <button class="btn btn-outline-info my-2 my-sm-0" type="submit">جستجو<i class="fa fa-search mr-2"></i>
-                </button>
+                <button class="btn btn-outline-info my-2 my-sm-0 mr-1" type="submit">جستجو<i
+                        class="fa fa-search mr-2"></i></button>
             </form>
         </div>
     </nav>

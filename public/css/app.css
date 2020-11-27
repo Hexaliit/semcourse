@@ -8,13 +8,6 @@ li {
 a,a:hover,a:visited {
     text-decoration: none !important;
 }
-.menu-level2 {
-    display: none;
-}
-.nav-with-item:hover .menu-level2 {
-    display: block;
-}
-/*http://localhost:8000/image/main.jpg*/
 .course-banner {
     height: 450px;
 }

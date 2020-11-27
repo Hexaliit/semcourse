@@ -29,7 +29,14 @@ class CourseController extends Controller
             ->with('course', $course)
             ->with('videos', $videos);
     }
-
+    public function search(Request $request)
+    {
+        $searchTerm = $request->search;
+        $courses = Course::whereRaw('match(title,content) against (? in Boolean mode)',$searchTerm)->get();
+        return view('course.search')
+            ->with('courses',empty($courses) ? '' : $courses)
+            ->with('searchTerm',$searchTerm);
+    }
     public function create()
     {
         $categories = Category::with('parent')->whereNotNull('parent_id')->get();
@@ -69,10 +76,10 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        $categories = Category::with('parent')->whereNotNull('parent_id')->get();
-        $main = Category::with('parent')->whereNull('parent_id')->get();
-        $cats = $course->categories;
         if (Auth::user()->id == $course->user_id or Auth::user()->level === 'مدیر') {
+            $categories = Category::with('parent')->whereNotNull('parent_id')->get();
+            $main = Category::with('parent')->whereNull('parent_id')->get();
+            $cats = $course->categories;
             return view('course.edit')
                 ->with('main', $main)
                 ->with('categories', $categories)
@@ -83,35 +90,31 @@ class CourseController extends Controller
         }
 
     }
-
-    public function getFile($file)
-    {
-        $file = ltrim($file, "p://localhost:8000/");
-        $file = str_replace('/', '\\', $file);
-        return $file;
-    }
-
     public function update(StoreCourse $request, Course $course)
     {
+        $basePath = dirname(storage_path()) . '\\public\\courses\\';
         $course->user_id = $request->user_id;
         $course->title = $request->title;
+        rename($basePath.$request->oldTitle,$basePath.$request->title);
         $course->content = $request->input('content');
         $course->price = $request->price;
         $course->categories()->sync($request->input('category'));
 
         if ($request->hasFile('avatar')) {
-            unlink(dirname(storage_path()) . '\\public\\courses\\' . str_replace('/', '\\', trim($request->oldAvatar, 'http://localhost:8000/courses/')));
+            $avatarName = '\\'.explode('/',$request->oldAvatar)[5];
+            unlink(dirname(storage_path()) . '\\public\\courses\\' .$request->title.$avatarName);
             $avatarPath = Storage::disk('uploads')->put('/courses/' . $request->title, $request->file('avatar'));
             $course->avatar = 'http://localhost:8000/' . $avatarPath;
         } else {
-            $course->avatar = $request->oldAvatar;
+            $course->avatar = str_replace($request->oldTitle,$request->title,$request->oldAvatar);
         }
         if ($request->hasFile('source')) {
-            unlink(dirname(storage_path()) . '\\public\\courses\\' . str_replace('/', '\\', trim($request->oldSource, 'http://localhost:8000/courses/')));
+            $sourceName = '\\'.explode('/',$request->oldSource)[5];
+            unlink(dirname(storage_path()) . '\\public\\courses\\' .$request->title.$sourceName);
             $sourcePath = Storage::disk('uploads')->put('/courses/' . $request->title, $request->file('source'));
             $course->source = 'http://localhost:8000/' . $sourcePath;
         } else {
-            $course->source = $request->oldSource;
+            $course->source = str_replace($request->oldTitle,$request->title,$request->oldSource);
         }
         $course->save();
         return redirect('/admin/course')->with('success', 'دوره با موفقیت ویرایش شد');
@@ -121,6 +124,17 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         if (Auth::user()->id == $course->user_id or Auth::user()->level === 'مدیر') {
+            //if course is sold return money to who has bought this course
+            $users = $course->users;
+            if (count($users) > 0)
+            {
+                foreach ($users as $user)
+                {
+                    $editUser = User::find($user->id);
+                    $editUser->balance = $editUser->balance + $course->price;
+                    $editUser->save();
+                }
+            }
             //delete all videos of the course
             $courseVideos = $course->videos;
             if (count($courseVideos) > 0) {
@@ -140,54 +154,63 @@ class CourseController extends Controller
     }
 
 
-    public function show($slug1, $slug2 = null)
+    public function showCourse($slug1, $slug2 = null)
     {
         if ($slug2 == null) {
-            $slug1 = str_replace('-', ' ', $slug1);
+            $slug1 = $this->strToSlug($slug1);
             $course = Course::where('title', $slug1)->firstOrFail();
             $categories = $course->categories;
             $name = $course->user->name;
             $videos = $course->videos;
+            $sorted = $videos->sort();
+            $videos = $sorted->values()->all();
             return view('course.show')
                 ->with('videos', $videos)
                 ->with('name', $name)
                 ->with('categories', $categories)
                 ->with('course', $course);
         } else {
-            $slug1 = str_replace('-', ' ', $slug1);
-            $slug2 = str_replace('-', ' ', $slug2);
-            //
-            //return $video;
-            $course = Course::where('title', $slug1)->firstOrFail();
-            $courseId = $course->id;
-            $video = Video::where('title', $slug2)->where('course_id', $courseId)->firstOrFail();
-            if ($video->show_on_demo == 1){
+            return $this->showVideo($slug1,$slug2);
+        }
+    }
+    public function strToSlug($slug)
+    {
+        $slug = str_replace('-', ' ', $slug);
+        return $slug;
+    }
+    public function showVideo($slug1,$slug2)
+    {
+        $slug1 = $this->strToSlug($slug1);
+        $slug2 = $this->strToSlug($slug2);
+        $course = Course::where('title', $slug1)->firstOrFail();
+        $courseId = $course->id;
+        $video = Video::where('title', $slug2)->where('course_id', $courseId)->firstOrFail();
+        if ($video->show_on_demo == 1){
+            $videos = $course->videos;
+            return view('video.show')
+                ->with('videos', $videos)
+                ->with('course', $course)
+                ->with('video', $video);
+        } else {
+            //checking if the user has th course
+            if (Auth::user())
+            {
                 $videos = $course->videos;
-                return view('video.show')
-                    ->with('videos', $videos)
-                    ->with('course', $course)
-                    ->with('video', $video);
-            } else {
-                //checking if the user has th course
-                if (Auth::user())
+                $id = $video->course->id;
+                $courses = Auth::user()->courses;
+                foreach ($courses as $course)
                 {
-                    $videos = $course->videos;
-                    $id = $video->course->id;
-                    $courses = Auth::user()->courses;
-                    foreach ($courses as $course)
+                    if ($course->id == $id)
                     {
-                        if ($course->id == $id)
-                        {
-                            return view('video.show')
-                                ->with('videos', $videos)
-                                ->with('course', $course)
-                                ->with('video', $video);
-                        }
+                        return view('video.show')
+                            ->with('videos', $videos)
+                            ->with('course', $course)
+                            ->with('video', $video);
                     }
-                    return redirect()->back()->with('warning','شما این دوره را خریداری نکرده اید');
                 }
-                return redirect('/login')->with('login','برای دسترسی به این بخش باید وارد سایت شوید');
+                return redirect()->back()->with('warning','شما این دوره را خریداری نکرده اید');
             }
+            return redirect('/login')->with('login','برای دسترسی به این بخش باید وارد سایت شوید');
         }
     }
     public function buy($user_id,$course_id)
@@ -209,7 +232,7 @@ class CourseController extends Controller
                 $user->save();
                 //attaching to course_user table
                 $user->courses()->attach($course->id);
-                return redirect('/category')->with('success','دوره با موفقیت خریداری شد');
+                return redirect('/')->with('success','دوره با موفقیت خریداری شد');
             }
         }
 
